@@ -23,3 +23,4 @@ apt-get install admx-msi-setup
 admx-msi-setup
 ```
 
+Those who installed, was able to install.
