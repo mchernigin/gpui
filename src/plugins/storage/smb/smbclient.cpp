@@ -20,6 +20,8 @@
 
 #include "smbclient.h"
 
+#include "smbauthenticationdialog.h"
+
 namespace gpui
 {
 
@@ -169,7 +171,7 @@ int SmbClient::deleteDir(const QString &directoryName)
 }
 
 bool SmbClient::setPermissions(const QString &path, mode_t mode)
-{    
+{
     return smbc_getFunctionChmod(ctx.get())(ctx.get(), path.toLocal8Bit().constData(), mode);
 }
 
@@ -183,6 +185,9 @@ void SmbClient::authenticationCallBack(const char *server, const char *share, ch
     strncpy(currentWorkGroup, defaultWorkGroup.constData(), workGroupLength - 1);
     strncpy(currentUser, defaultUserName.constData(), userLength - 1);
     strncpy(currentPassword, defaultPassword.constData(), passwordLength - 1);
+
+    auto dialog = new AuthenticationDialog();
+    dialog->show();
 }
 
 void SmbClient::closeFile(FileHandle handle)

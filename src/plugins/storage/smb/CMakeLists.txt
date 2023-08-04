@@ -1,7 +1,12 @@
 find_package(GPUI COMPONENTS io model REQUIRED)
 include_directories(${GPUI_INCLUDE_DIRS})
 
-find_package(Qt5 COMPONENTS Core REQUIRED)
+find_package(Qt5 COMPONENTS Core Widgets REQUIRED)
+
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTOUIC ON)
 
 set(PLUGIN_NAME smb-storage-plugin)
 set(PLUGIN_LIBRARY_NAME smb-storage-static)
@@ -10,6 +15,7 @@ set(HEADERS
     smbclient.h
     smbdirectory.h
     smbfile.h
+    smbauthenticationdialog.h
 )
 
 set(SOURCES
@@ -17,13 +23,20 @@ set(SOURCES
     smbdirectory.cpp
     smbfile.cpp
     smbstorageplugin.cpp
+    smbauthenticationdialog.cpp
 )
 
+set(UI_FORMS
+    smbauthenticationdialog.ui
+)
+
+set(SOURCES ${SOURCES} ${HEADERS} ${UI_FORMS})
+
 add_gpui_plugin(${PLUGIN_NAME} ${SOURCES})
-target_link_libraries(${PLUGIN_NAME} Qt5::Core)
+target_link_libraries(${PLUGIN_NAME} Qt5::Core Qt5::Widgets)
 
 add_library(${PLUGIN_LIBRARY_NAME} STATIC ${SOURCES})
-target_link_libraries(${PLUGIN_LIBRARY_NAME} Qt5::Core)
+target_link_libraries(${PLUGIN_LIBRARY_NAME} Qt5::Core Qt5::Widgets)
 
 ## samba requires libsmbclient
 find_path(SAMBA_INCLUDE_DIR
